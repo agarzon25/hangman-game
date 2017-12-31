@@ -1,14 +1,56 @@
-body {
-	background-image: url("../images/landscape.png");
-	background-size: cover;
+img {
+	width: 200px;
+	height: 200px;
+	margin: 0 auto;
+	padding-right: 30px;
 }
 
-img {
-	width: 35%;
-	height: 35%;
+body, html {
+	height: 100%;
+	overflow: auto;
+}
+
+.container {
+	background-image: url("../images/landscape.png");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	font-family: 'VT323', monospace;
+	margin-left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#ph-logo {
+	width: 100%;
+	height: 100%;
 	margin: 0 auto;
+	padding-top: 25px;
+}
+
+#wtpImage {
+	padding: 15px 25px 45px 15px;
+	margin: 0 auto;
+}
+
+p.wtp {
+	padding-top: 5px;
+	font-size: 25px;
+}
+
+.vcenter {
+	display: inline-block;
+	vertical-align: center;
+	float: none;
+}
+
+.textbox {
+	border-color: black;
+	border-style: dashed;
+	border-width: 2px;
+	margin-top: 35px;
 }
 
 .row {
 	text-align: center;
 }
+

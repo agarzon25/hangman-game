@@ -4,22 +4,158 @@
 	<title>Hangman-game</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="assets/images/poke-ball.png"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/css/style.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
 </head>
 <body>
 	<div class="container">
 		<div class="row">
-    	<img src="assets/images/PH-Logo.png">
+			<div class="col-md-3 text-center vcenter">
+	    		'<img id="ph-logo" src="assets/images/PH-Logo.png"/>
+	    	</div>
 		</div>
-		<div class="panel panel-default">
-			<div class="panel-body">
-				<div class="text-center">
-				<img src="assets/images/charizard.png">
+		<div class="row">
+			<div class="col-md-3 panel text-center vcenter textbox">
+				<div class="col-md-12 wtp-header">
+					<p class="wtp">
+						Who's That Pokemon?!
+					</p>
 				</div>
-		</div>
+				<div class="col-md-12">
+					<div id="wtpImage"></div>
+				</div>
+			</div>
+			<div class="col-md-3 panel text-center vcenter textbox">
+				<div class="col-md-12 pts" id="start">
+					<h3 class="startPress">
+						Guess a letter!
+					</h3>
+				</div>
+				<div class="col-md-12">
+					<div id="word"></div>
+					<h3 id='word-blanks'>_ _ _ _ _ _ _ _ _ </h3>
+				</div>
+				<!--<div class="col-md-12">
+					<div class="lettersGuessed"></div>
+				</div>-->
+				<div class="col-md-12">
+					<div id="guessNum"></div>
+				</div>
+				<div class="col-md-12">
+					<div id="wins"></div>
+				</div>
+				<div class="col-md-12">
+					<div id="losses"></div>
+				</div>
+			</div>
+		</div>	
 	</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	// initial values
+	let ltrs = "";
+	let blanks = [];
+	let wins =  0;
+	let losses = 0;
+	let guesses = 0;
+	let progress = [];
+	let random_word = "";
+	let wrongGuesses = [];
+
+	//pokemon array
+	let pkm = [	
+		'charizard',
+		'charmander',
+		'gengar',
+		'mewtwo',
+		'pikachu',
+		'poliwhirl',
+		'venasaur'
+		];
+
+	function newWord() {
+		random_word = pkm[Math.floor(Math.random() * pkm.length)];
+		guesses = random_word.length+1;
+		blanks = [];
+		console.log(guesses);
+		console.log(random_word);
+		let split_ran = random_word.split("");
+		//letters = split_ran;
+		console.log(split_ran);
+		for (let i = 0; i < random_word.length; i++) {
+			blanks.push("_");
+		};
+		console.log(blanks)
+		$('#wtpImage').html('<img class="wtpImage" src="assets/images/' + random_word + '.png"</img>');
+		$('#word-blanks').text(blanks.join(' '))
+		//$('#lettersGuessed').text('Letters guessed: ' +wrongGuesses)
+		$("#guessNum").text(guesses + ' tries left')
+		$('#wins').text('Wins: ' + wins)
+		$('#losses').text('Losses: ' + losses)
+		return random_word
+	}
+
+	//if letter is in random word then it will push 
+	function check(ltr) {
+		console.log(ltr)
+		console.log(random_word)
+		let letterCheck = false;
+		for (let i=0; i < random_word.length; i++) {
+			if (random_word[i] === ltr) {
+				console.log(random_word[i])
+				console.log(ltr)
+				letterCheck = true;
+			}
+		}
+		console.log(letterCheck)
+		if (letterCheck) {
+			for (let k=0;k < random_word.length;k++) {
+				if (random_word[k] === ltr) {
+					blanks[k] = ltr;
+				} 
+			}
+			console.log(blanks)
+		} else {
+			wrongGuesses.push(ltr);
+			guesses--;
+		}
+	}
+
+	//updating html after every right or wrong guess
+	function gamePlay() {
+		console.log("wins: " + wins + " losses: " + losses)
+		random_letters = random_word.split('');
+		console.log(random_letters);
+
+		$('#guessNum').text(guesses + ' tries left')
+		$('#word-blanks').text(blanks.join(' '))
+		$('#lettersGuessed').text('Letters guessed: ' +wrongGuesses)
+
+		if (random_letters.toString() === blanks.toString()){
+			wins++;
+			alert("It's " + random_word + '!');
+			newWord();
+		} else if (guesses === 0) {
+			losses++;
+			alert("You lost. Try again!")
+			newWord()
+		}
+	}
+
+	//Main Function
+	$(document).ready(function() {
+		newWord()
+	});
+
+	document.onkeyup = function(event) {
+			ltrs = String.fromCharCode(event.keyCode).toLowerCase();
+			check(ltrs);
+			gamePlay();
+	};
+</script>
+
 </html>
